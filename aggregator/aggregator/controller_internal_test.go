@@ -40,4 +40,10 @@ func TestAssignOptionalInt32DoesNotReportUnchangedValue(t *testing.T) {
 	assignOptionalInt32(&secondChange, &target, 3, observer.StatusChangeCausePending)
 	assert.Same(t, firstPointer, target)
 	assert.False(t, secondChange.HasChanged())
+
+	thirdChange := haschange.New[observer.StatusChangeCause]()
+	assignOptionalInt32(&thirdChange, &target, 4, observer.StatusChangeCausePending)
+	require.NotNil(t, target)
+	assert.Equal(t, int32(4), *target)
+	assert.True(t, thirdChange.HasChanged())
 }

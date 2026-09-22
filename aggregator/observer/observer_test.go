@@ -12,26 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package observer
+package observer_test
 
 import (
 	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/kubewharf/podseidon/aggregator/observer"
 )
 
 func TestPendingStatusChangeCauseBitToString(t *testing.T) {
 	t.Parallel()
 
-	assert.Equal(t, "Pending", StatusChangeCausePending.BitToString())
-	assert.Equal(t, "UnscheduledPending", StatusChangeCauseUnscheduledPending.BitToString())
+	assert.Equal(t, "Pending", observer.StatusChangeCausePending.BitToString())
+	assert.Equal(t, "UnscheduledPending", observer.StatusChangeCauseUnscheduledPending.BitToString())
 }
 
 func TestLoggingObserverAggregatedPendingReplicas(t *testing.T) {
 	t.Parallel()
 
-	NewLoggingObserver().Aggregated(context.Background(), Aggregated{
+	observer.NewLoggingObserver().Aggregated(context.Background(), observer.Aggregated{
+		NumPods:                    5,
+		ReadyReplicas:              0,
+		ScheduledReplicas:          3,
+		RunningReplicas:            0,
+		AvailableReplicas:          0,
 		PendingReplicas:            3,
 		UnscheduledPendingReplicas: 2,
 	})
